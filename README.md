@@ -5,3 +5,5 @@ Afrizal Bagas Santoso (21120117130075)</br>
 
 ## SCREENSHOT
 ![Alt text](/screenshot.PNG?raw=true "EJB")
+
+![Alt text](/screenshot2.PNG?raw=true "EJB")
