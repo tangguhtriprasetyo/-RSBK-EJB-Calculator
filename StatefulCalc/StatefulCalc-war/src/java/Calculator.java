@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 public class Calculator extends HttpServlet {
 
     CalcBeanLocal calcBean = lookupCalcBeanLocal();
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,70 +45,63 @@ public class Calculator extends HttpServlet {
             String operasi = null;
             int count = 0;
             String operation = request.getParameter("op");
-            if (!request.getParameter("value").isEmpty() && operation.equals("+") ) {
+            if (!request.getParameter("value").isEmpty() && operation.equals("+")) {
                 total = calcBean.add(Double.parseDouble(request.getParameter("value")));
-            }
-            else if (!request.getParameter("value").isEmpty() && operation.equals("-")) {
+            } else if (!request.getParameter("value").isEmpty() && operation.equals("-")) {
                 total = calcBean.min(Double.parseDouble(request.getParameter("value")));
-            }
-            else if (!request.getParameter("value").isEmpty() && operation.equals("/")) {
+            } else if (!request.getParameter("value").isEmpty() && operation.equals("/")) {
                 total = calcBean.bagi(Double.parseDouble(request.getParameter("value")));
-            }
-            else if (!request.getParameter("value").isEmpty() && operation.equals("X")) {
+            } else if (!request.getParameter("value").isEmpty() && operation.equals("X")) {
                 total = calcBean.kali(Double.parseDouble(request.getParameter("value")));
-            }
-            else if (operation.equals("CE")) {
+            } else if (operation.equals("CE")) {
                 total = calcBean.remove();
                 count = calcBean.removeCount();
-            }
-            else {
+            } else {
                 total = calcBean.getTotal();
             }
-            
+
             if (calcBean.getCount() != 0 && operation.equals("+")) {
                 operation = " + ";
                 operasi = String.valueOf(calcBean.operasi()) + operation + request.getParameter("value");
             }
-            
+
             if (calcBean.getCount() != 0 && operation.equals("-")) {
                 operation = " - ";
                 operasi = String.valueOf(calcBean.operasi()) + operation + request.getParameter("value");
             }
-            
+
             if (calcBean.getCount() != 0 && operation.equals("/")) {
                 operation = " / ";
                 operasi = String.valueOf(calcBean.operasi()) + operation + request.getParameter("value");
             }
-            
+
             if (calcBean.getCount() != 0 && operation.equals("X")) {
                 operation = " * ";
                 operasi = String.valueOf(calcBean.operasi()) + operation + request.getParameter("value");
             }
-            
+
             PrintWriter out = response.getWriter();
-            
+
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
             rd.include(request, response);
-            
-            if (calcBean.getCount() == 1 ) {
+
+            if (calcBean.getCount() == 1) {
                 out.println(request.getParameter("value") + operation + "<br />");
+            } else if (calcBean.getCount() > 1) {
+                out.println("<div id='calc-contain'>");
+                out.println(
+                        "        <h1 >Hasil</h1>\n"
+                        +        "<h3>"+ operasi + "</h3>\n"
+                        + "        <input type=\"text\" name=\"value\"/ value=\"" + total + "\"><br><br>\n"
+                        + "    </div>");
             }
-            
-            else if (calcBean.getCount() > 1 ) {
-                out.println(operasi + "<br >");
-                out.println("Total: " + total + "<br >");
-            }
-            
-        } 
-        
-        catch (IOException | NumberFormatException | ServletException ex) {
+
+        } catch (IOException | NumberFormatException | ServletException ex) {
             PrintWriter out = response.getWriter();
             out.println("Error: " + ex.getMessage() + "<br />Silahkan isi field dengan angka");
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
             rd.include(request, response);
-        } 
-        
-        finally {
+        } finally {
             PrintWriter out = response.getWriter();
             out.close();
         }
